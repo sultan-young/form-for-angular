@@ -11,18 +11,8 @@
  .main {
     display: flex;
     height: 100%;
-    .controls-wrap {
-        width: 260px;
-        div {
-            width: 100px;
-            margin: 10px;
-            background-color: #eee;
-        }
-    }
-    .editor-wrap {
+    lib-editors-panel {
         flex: 1;
-        padding: 10px;
-        background: #ccc;
     }
     .settings-wrap {
         width: 100px;
