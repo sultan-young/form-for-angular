@@ -6,6 +6,8 @@ import { ControlRelationList } from '../controls-panel/controls.config';
 import { ControlWrapComponent } from '../../common/components/control-wrap/control-wrap.component';
 
 
+const MARK_LINE_OFFSET = 30;
+
 @Component({
   selector: 'lib-editors-panel',
   templateUrl: './editor.component.html',
@@ -24,8 +26,8 @@ export class EditorComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     // 标线
     let mark_line = document.querySelector('.mark-line') as HTMLDivElement;
-    const editorContainerClientY = this.editorContainerRef.nativeElement.getBoundingClientRect().y;
-
+    const editorContainerEL = this.editorContainerRef.nativeElement;
+    const editorContainerClientY = editorContainerEL.getBoundingClientRect().y;
 
     // 元素进入放置区域
     fromEvent(document.querySelector('.editor-main')!, 'dragenter').subscribe(event => {
@@ -38,14 +40,31 @@ export class EditorComponent implements OnInit, AfterViewInit {
       tap(event => event.preventDefault()),
       throttleTime(30),
     ).subscribe(event => {
-      console.log('event: ', event );
+      const nodeList = Array.from(editorContainerEL.querySelectorAll('lib-control-wrap'));
+
+      // 真实的位置像上便宜30px，防止遮挡视野
+      const mouseOffsetY = event.clientY - MARK_LINE_OFFSET;
+      // 标线的真实位置还需要减去容器到顶部的距离
+      let markLineOffsetY = mouseOffsetY - editorContainerClientY;
+      markLineOffsetY = markLineOffsetY > 0 ? markLineOffsetY : 0;
+
+      // 当前鼠标所在位置控件
+      let targetEl;
+      for (let i = 0; i < nodeList.length; i++) {
+        let elRect = nodeList[i].getBoundingClientRect();
+        const { y, height } = elRect;
+        // 鼠标在某个控件之间
+        if (mouseOffsetY > y && mouseOffsetY < y + height) {
+          targetEl = nodeList[i];
+          break;
+        }
+      }
+      console.log('event: ',  targetEl );
       // prevent default to allow drop
       // console.log('event: dragover', event);
       if (mark_line) {
-        let offsetY = event.clientY - editorContainerClientY - 30;
         // 限制标线出容器
-        offsetY = offsetY > 0 ? offsetY : 0;
-        mark_line.style.transform = `translateY(${offsetY}px)`
+        mark_line.style.transform = `translateY(${markLineOffsetY}px)`
       }
     })
 

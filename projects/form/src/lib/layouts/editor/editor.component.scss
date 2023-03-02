@@ -17,6 +17,7 @@
         position: relative;
         .mark-line {
             background-color: rgb(6, 191, 181);
+            z-index: 1;
             top: 0;
             left: 0;
             right: 0;
