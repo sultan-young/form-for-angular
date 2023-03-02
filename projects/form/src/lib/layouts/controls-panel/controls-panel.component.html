@@ -1,3 +1,3 @@
 <aside class="controls-panel">
-    <div [draggable]="true" *ngFor="let control of controls">{{control.name}}</div>
+    <div #controlRef [attr.key]="control.key" [draggable]="true" *ngFor="let control of controlRelationList">{{control.name}}</div>
 </aside>
