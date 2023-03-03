@@ -3,6 +3,7 @@ import { FormComponent } from './form.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LayoutsModule } from './layouts/layouts.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 
@@ -14,6 +15,7 @@ import { LayoutsModule } from './layouts/layouts.module';
     CommonModule,
     FormsModule,
     LayoutsModule,
+    BrowserAnimationsModule,
   ],
   exports: [
     FormComponent

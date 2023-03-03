@@ -1,0 +1,55 @@
+<nz-form-item
+  [hidden]="model.hidden"
+  [class]="model.className"
+  [style]="model.itemStyle"
+>
+  <nz-form-label
+    [nzNoColon]="!model.label"
+    [nzRequired]="isRequired && !!model.label"
+    [nzSpan]="
+      isInlineOrMultipleColumn
+        ? null
+        : model.nzLabelSpan! || formConfig.nzLabelSpan!
+    "
+    [style]="model.labelStyle"
+    >{{ model.label }}</nz-form-label
+  >
+  <nz-form-control
+    [nzValidateStatus]="model.control"
+    [nzErrorTip]="getError()"
+    [style]="model.controlStyle"
+    [nzSpan]="
+      isInlineOrMultipleColumn
+        ? null
+        : model.nzControlSpan! || formConfig.nzControlSpan!
+    "
+  >
+    <nz-spin [nzSpinning]="model.loading" [nzSize]="'small'">
+      <ng-content></ng-content>
+      <div class="description" *ngIf="model.description">
+        <ng-container [ngSwitch]="true">
+          <ng-container *ngSwitchCase="isObject(model.description)">
+            <span>{{ descriptionInfo.text }}</span>
+            <span
+              class="description__more"
+              nz-tooltip
+              [nzTooltipTitle]="descriptionInfo.moreContent"
+              ><a
+                [style.pointer-events]="
+                  descriptionInfo.moreLinkUrl ? 'auto' : 'none'
+                "
+                target="_blank"
+                [href]="descriptionInfo.moreLinkUrl"
+                >{{ descriptionInfo.moreText }}</a
+              ></span
+            >
+          </ng-container>
+          <ng-container *ngSwitchCase="isTemplateRef(model.description)">
+            <ng-template [ngTemplateOutlet]="descriptionRef"></ng-template>
+          </ng-container>
+          <ng-container *ngSwitchDefault>{{ model.description }}</ng-container>
+        </ng-container>
+      </div>
+    </nz-spin>
+  </nz-form-control>
+</nz-form-item>

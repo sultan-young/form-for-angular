@@ -1,0 +1,28 @@
+<ng-container [formGroup]="model.formGroup!">
+  <ng-container [ngTemplateOutlet]="model.mode === 'normal' ? radioRef : radioButtonRef"></ng-container>
+  <!-- 正常单选 -->
+  <ng-template #radioRef>
+    <nz-radio-group [formControlName]="model.id">
+      <label
+        nz-radio
+        *ngFor="let item of model.nzRadio"
+        [nzValue]="item.value"
+        [nzDisabled]="item.nzDisabled"
+        >{{ item.label }}</label
+      >
+    </nz-radio-group>
+  </ng-template>
+
+  <!-- 按钮组样式 -->
+  <ng-template #radioButtonRef>
+    <nz-radio-group [formControlName]="model.id" [nzButtonStyle]="model.nzButtonStyle">
+      <label
+        nz-radio-button
+        *ngFor="let item of model.nzRadio"
+        [nzValue]="item.value"
+        [nzDisabled]="item.nzDisabled"
+        >{{ item.label }}</label
+      >
+    </nz-radio-group>
+  </ng-template>
+</ng-container>

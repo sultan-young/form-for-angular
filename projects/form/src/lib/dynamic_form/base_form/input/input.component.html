@@ -1,0 +1,37 @@
+<ng-container [formGroup]="model.formGroup!">
+  <!-- 非搜索型输入框!-->
+  <ng-container
+    *ngIf="!model.nzSearch"
+    [ngTemplateOutlet]="inputTemplateRef"
+  ></ng-container>
+
+  <!-- 搜索型输入框!-->
+  <nz-input-group
+    *ngIf="model.nzSearch"
+    [nzSearch]
+    [nzSuffix]="suffixIconSearchTemplateRef"
+    [class.input--borderless]="model.nzBorderless"
+  >
+    <ng-container [ngTemplateOutlet]="inputTemplateRef"></ng-container>
+  </nz-input-group>
+
+  <ng-template #inputTemplateRef>
+    <input
+      [maxlength]="model.maxLength"
+      [appInputFormat]="model.appInputFormat"
+      [customRegRule]="model.customRegRule"
+      nz-input
+      [type]="model.type"
+      [placeholder]="model.placeholder"
+      [formControlName]="model.id"
+      [name]="model.id"
+      [maxlength]="model.maxLength"
+      [nzBorderless]="model.nzBorderless"
+      [nzSize]="model.nzSize!"
+    />
+  </ng-template>
+
+  <ng-template #suffixIconSearchTemplateRef>
+    <i nz-icon nzType="search"></i>
+  </ng-template>
+</ng-container>

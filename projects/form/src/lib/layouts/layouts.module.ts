@@ -4,6 +4,7 @@ import { EditorComponent } from './editor/editor.component';
 import { ControlsPanelComponent } from './controls-panel/controls-panel.component';
 import { UiComponentsModule } from '../ui-components/ui-components.module';
 import { AppCommonModule } from '../common/common.module';
+import { DynamicFormModuleV2 } from '../dynamic_form';
 
 
 
@@ -12,6 +13,7 @@ import { AppCommonModule } from '../common/common.module';
     CommonModule,
     UiComponentsModule,
     AppCommonModule,
+    DynamicFormModuleV2,
   ],
   declarations: [
     EditorComponent,

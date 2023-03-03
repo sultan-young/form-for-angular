@@ -1,0 +1,38 @@
+.dynamic-form-v2 {
+    
+    & ::ng-deep {
+        nz-input-number {
+            transition: none;
+        }
+    }
+    
+    &.ant-form-horizontal,
+    &.ant-form-vertical {
+        & ::ng-deep nz-input-number {
+            width: 100%;
+        }
+    }
+    
+    &.ant-form-inline {
+        & ::ng-deep {
+            nz-input-number,
+            nz-select {
+                width: 140px;
+            }
+            
+            nz-form-item {
+                margin-bottom: 10px;
+            }
+        }
+        
+    }
+    
+    &.multiple-column {
+        & ::ng-deep {
+            nz-input-number,
+            nz-select {
+                width: 100%;
+            }
+        }
+    }
+}

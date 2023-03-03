@@ -1,0 +1,73 @@
+<form
+  nz-form
+  class="dynamic-form-v2"
+  [ngClass]="{ 'multiple-column': multipleColumn !== 24 }"
+  [nzLayout]="dynamicFormModel.config.layout!"
+  [formGroup]="dynamicFormModel.formGroup"
+  [style]="dynamicFormModel.config.style"
+>
+  <div *ngIf="isMultipleColumn" nz-row [nzGutter]="24">
+    <div
+      nz-col
+      [nzSpan]="multipleColumn"
+      *ngFor="let model of visibleDynamicFormModel"
+    >
+      <ng-container
+        [ngTemplateOutlet]="unitTemplateRef"
+        [ngTemplateOutletContext]="{ model: model }"
+      ></ng-container>
+    </div>
+  </div>
+
+  <ng-container *ngIf="!isMultipleColumn">
+    <ng-container
+      *ngFor="let model of visibleDynamicFormModel"
+      [ngTemplateOutlet]="unitTemplateRef"
+      [ngTemplateOutletContext]="{ model: model }"
+    ></ng-container>
+  </ng-container>
+
+  <ng-template #unitTemplateRef let-model="model">
+    <ng-template [ngIf]="insertBeforeContentChildren.length">
+      <ng-container *ngFor="let template of getTemplate(model.id, 'before')">
+        <ng-container
+          [ngTemplateOutlet]="template"
+          [ngTemplateOutletContext]="{
+            model: model,
+            formGroup: dynamicFormModel.formGroup,
+            config: dynamicFormModel.config
+          }"
+        ></ng-container>
+      </ng-container>
+    </ng-template>
+    <dynamic-loader
+      [model]="model"
+      [formConfig]="dynamicFormModel.config"
+    >
+    </dynamic-loader>
+    <ng-template [ngIf]="insertAfterContentChildren.length">
+      <ng-container *ngFor="let template of getTemplate(model.id, 'after')">
+        <ng-container
+          [ngTemplateOutlet]="template"
+          [ngTemplateOutletContext]="{
+            model: model,
+            formGroup: dynamicFormModel.formGroup,
+            config: dynamicFormModel.config
+          }"
+        ></ng-container>
+      </ng-container>
+    </ng-template>
+  </ng-template>
+  
+  <!-- 提交操作项 -->
+  <ng-container *ngIf="dfActions">
+    <nz-form-item style="margin-left: auto;">
+      <nz-form-label [nzNoColon]="true" [nzSpan]="dynamicFormModel.config.nzLabelSpan!"></nz-form-label>
+      <nz-form-control [nzSpan]="dynamicFormModel.config.nzControlSpan!">
+        <ng-container *nzStringTemplateOutlet="dfActions">
+          <div [innerHTML]="dfActions"></div>
+        </ng-container>
+      </nz-form-control>
+    </nz-form-item>
+  </ng-container>
+</form>

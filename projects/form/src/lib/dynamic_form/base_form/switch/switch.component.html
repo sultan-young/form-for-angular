@@ -1,0 +1,13 @@
+<ng-container [formGroup]="model.formGroup!">
+  <nz-switch
+    [formControlName]="model.id"
+    [nzSize]="model.nzSize!"
+    [nzCheckedChildren]="checkedTemplate"
+    [nzUnCheckedChildren]="unCheckedTemplate"
+    [nzLoading]="model.nzLoading"
+    [nzSize]="model.nzSize!"
+  ></nz-switch>
+</ng-container>
+
+<ng-template #checkedTemplate><i nz-icon nzType="check"></i></ng-template>
+<ng-template #unCheckedTemplate><i nz-icon nzType="close"></i></ng-template>

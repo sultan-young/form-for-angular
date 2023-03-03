@@ -1,0 +1,40 @@
+<ng-container [formGroup]="model.formGroup!">
+  <!-- <nz-select
+    [nzMode]="model.nzMode"
+    [formControlName]="model.id"
+    [nzPlaceHolder]="model.placeholder"
+    [nzShowArrow]="model.nzShowArrow"
+    [nzAllowClear]="model.nzAllowClear"
+    [nzShowSearch]="model.nzShowSearch"
+    [nzMaxTagCount]="model.nzMaxTagCount!"
+    [nzMaxMultipleCount]="model!.nzMaxMultipleCount!"
+    [nzBorderless]="model.nzBorderless"
+    [nzSize]="model.nzSize!"
+  >
+    <ng-container *ngIf="isTreeSelectGroup;else normalSelect">
+      <nz-option-group *ngFor="let group of model.nzOptionsGroup" [nzLabel]="group.label">
+        <nz-option *ngFor="let option of group.nzOption" [nzDisabled]="option.disabled" [nzValue]="option.value" [nzLabel]="option.label"></nz-option>
+      </nz-option-group>
+    </ng-container>
+
+    <ng-template #normalSelect>
+      <nz-option
+        *ngFor="let option of model.nzOptions"
+        [nzDisabled]="option.disabled"
+        [nzValue]="option.value"
+        [nzLabel]="option.label"
+      ></nz-option>
+    </ng-template>
+  </nz-select> -->
+  <nz-tree-select
+      [nzDropdownMatchSelectWidth]="true"
+      [formControlName]="model.id"
+      [nzNodes]="model.nzNodes"
+      [nzAllowClear]="model.nzAllowClear"
+      [nzShowSearch]="model.nzShowSearch"
+      [nzPlaceHolder]="model.placeholder"
+      [nzCheckable]="model.nzCheckable"
+      [nzDefaultExpandAll]="model.nzDefaultExpandAll"
+      [nzVirtualHeight]="model.nzVirtualHeight"
+    ></nz-tree-select>
+</ng-container>

@@ -1,0 +1,38 @@
+<ng-container [formGroup]="model.formGroup!">
+  <ng-container [ngTemplateOutlet]="
+    model.type==='time'?dateTimeRangeRef:model.type === 'normal' ? datePickerRef : datePickerRangeRef
+    "></ng-container>
+  <ng-template #datePickerRef>
+    <nz-date-picker
+      [formControlName]="model.id"
+      [nzMode]="model.mode"
+      [nzPlaceHolder]="model.placeholder"
+      [nzBorderless]="model.nzBorderless"
+      [nzDisabledDate]="model.nzDisabledDate"
+      [nzFormat]="model.nzFormat"
+      [nzSize]="model.nzSize!"
+      [nzShowTime]="model.nzShowTime"
+      (nzOnOpenChange)="model.nzOnOpenChange($event)"
+    >
+    </nz-date-picker>
+  </ng-template>
+
+  <ng-template #datePickerRangeRef>
+    <nz-range-picker
+      [nzShowTime]="model.nzShowTime"
+      [formControlName]="model.id"
+      [nzMode]="model.mode"
+      [nzPlaceHolder]="model.placeholder"
+      [nzBorderless]="model.nzBorderless"
+      [nzDisabledDate]="model.nzDisabledDate"
+      [nzFormat]="model.nzFormat"
+      [nzSize]="model.nzSize!"
+      (nzOnOpenChange)="model.nzOnOpenChange($event)"
+      ></nz-range-picker>
+  </ng-template>
+  <ng-template #dateTimeRangeRef>
+    <nz-time-picker [formControlName]="model.id" [nzPlaceHolder]="model.placeholder" [nzSize]="model.nzSize!"
+      [nzFormat]="model.nzFormat" [nzHideDisabledOptions]="model.nzHideDisabledOptions"
+      [nzDisabledMinutes]="model.nzDisabledMinutes" [nzNowText]="model.nzNowText" (ngModelChange)="model.nzOnOpenChange($event)"></nz-time-picker>
+  </ng-template>
+</ng-container>

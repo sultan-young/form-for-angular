@@ -1,0 +1,46 @@
+<nz-input-group
+  [formGroup]="model.formGroup!"
+  [nzSuffix]="textAreaClearTpl"
+  class="ant-input-affix-wrapper-textarea-with-clear-btn"
+>
+  <!-- 带字符统计的textArea -->
+  <nz-textarea-count
+    *ngIf="model.nzMaxCharacterCount"
+    [nzMaxCharacterCount]="model.nzMaxCharacterCount"
+  >
+    <textarea
+      [appInputFormat]="model.appInputFormat"
+      [customRegRule]="model.customRegRule"
+      [formControlName]="model.id"
+      [rows]="model.rows!"
+      nz-input
+      [placeholder]="model.placeholder"
+      [name]="model.id"
+      [nzSize]="model.nzSize!"
+    ></textarea>
+  </nz-textarea-count>
+
+  <!-- 普通textArea -->
+  <textarea
+    [appInputFormat]="model.appInputFormat"
+    [customRegRule]="model.customRegRule"
+    *ngIf="!model.nzMaxCharacterCount"
+    [formControlName]="model.id"
+    [rows]="model.rows!"
+    nz-input
+    [placeholder]="model.placeholder"
+    [name]="model.id"
+    [nzSize]="model.nzSize!"
+  ></textarea>
+</nz-input-group>
+
+<ng-template #textAreaClearTpl>
+  <span
+    nz-icon
+    class="ant-input-clear-icon"
+    nzTheme="fill"
+    nzType="close-circle"
+    *ngIf="model.value && !model.disabled"
+    (click)="model.setValue(null)"
+  ></span>
+</ng-template>

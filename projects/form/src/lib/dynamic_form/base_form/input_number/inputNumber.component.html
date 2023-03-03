@@ -1,0 +1,21 @@
+<ng-container [formGroup]="model.formGroup!">
+  <ng-container [ngTemplateOutlet]="inputNumberTemplateRef"></ng-container>
+  <ng-template #inputNumberTemplateRef>
+    <nz-input-number
+      [appInputFormat]="model.appInputFormat"
+      [customRegRule]="model.customRegRule"
+      [nzMax]="model.nzMax"
+      [nzMin]="model.nzMin"
+      [nzPrecision]="model.nzPrecision"
+      [nzStep]="model.nzStep"
+      [formControlName]="model.id"
+      [nzFormatter]="model.nzFormatter"
+      [nzParser]="model.nzParser"
+      [nzPlaceHolder]="model.placeholder"
+      [class.input--borderless]="model.nzBorderless"
+      [nzSize]="model.nzSize!"
+      [nzPrecisionMode]="model.nzPrecisionMode"
+      type="text"
+    ></nz-input-number>
+  </ng-template>
+</ng-container>
