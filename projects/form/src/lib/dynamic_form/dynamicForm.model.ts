@@ -13,11 +13,11 @@ export class DfGroupModel {
     style: {}
   };
   group: DfFormItemModelSet[] = [];
-  formGroup !: FormGroup;
+  formGroup = new FormGroup({});
 
   constructor(group: DfFormItemModelSet[], config?: DfGroupModelOptionConfig) {
     this.validateGroupModel(group);
-    this.group = group;
+    
     Object.assign(this.config, config);
     this.initFormGroup();
     this.afterCreated();
@@ -31,13 +31,16 @@ export class DfGroupModel {
   }
 
   private initFormGroup() {
-    const formGroupControl = new FormGroup({});
     this.group.forEach((item) => {
-      formGroupControl.addControl(item.id, item.control)
-      item.formGroup = formGroupControl;
-      item.parentModel = this;
+      this.setModel(item);
     });
-    this.formGroup = formGroupControl;
+  }
+
+  setModel(model: DfFormItemModelSet) {
+    this.formGroup.addControl(model.id, model.control);
+    model.formGroup = this.formGroup;
+    model.parentModel = this;
+    this.group.push(model);
   }
 
   private afterCreated() {
@@ -155,5 +158,7 @@ export class DfGroupModel {
       this.group[modelId].enable(opts);
     }
   }
+
+
 
 }

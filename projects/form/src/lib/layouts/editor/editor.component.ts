@@ -5,6 +5,7 @@ import { InputComponent } from '../../ui-components/input/input.component';
 import { ControlRelationList } from '../controls-panel/controls.config';
 import { ControlWrapComponent } from '../../common/components/control-wrap/control-wrap.component';
 import { DfCheckboxModel, DfGroupModel, DfInputModel, DfRadioModel, DfSelectModel, DfSwitchModel, DfTextAreaModel } from '../../dynamic_form';
+import { v4 as uuid } from 'uuid'
 
 
 const MARK_LINE_OFFSET = 0;
@@ -42,9 +43,9 @@ export class EditorComponent implements OnInit, AfterViewInit {
     // 元素在放置区域内拖动
     fromEvent<DragEvent>(document.querySelector('.editor-main')!, 'dragover').pipe(
       tap(event => event.preventDefault()),
-      throttleTime(100),
+      throttleTime(30),
     ).subscribe(event => {
-      const nodeList = Array.from(editorContainerEL.querySelectorAll('lib-control-wrap'));
+      const nodeList = Array.from(editorContainerEL.querySelectorAll('dynamic-loader'));
 
       // 真实的位置像上便宜30px，防止遮挡视野
       const mouseOffsetY = event.clientY - MARK_LINE_OFFSET;
@@ -99,10 +100,21 @@ export class EditorComponent implements OnInit, AfterViewInit {
       // prevent default action (open as link for some elements)
       event.preventDefault();
       const key = event.dataTransfer?.getData('control_key');
-      const targetComponent = ControlRelationList.find(item => item.key === key)?.component;
-      if (targetComponent) {
-        this.appendComponent(targetComponent, insert_index)
+
+      // 动态表单方式
+      const targetModel = ControlRelationList.find(item => item.key === key)?.dynamicModel as any;
+      if (targetModel) {
+        this.myFormModel.setModel(new targetModel({
+          id: uuid(),
+          label: 'asdf',
+        }))
       }
+
+      // 纯ui方式
+      // const targetComponent = ControlRelationList.find(item => item.key === key)?.component;
+      // if (targetComponent) {
+      //   this.appendComponent(targetComponent, insert_index)
+      // }
       mark_line.style.display = 'none';
     })
   }
@@ -118,101 +130,101 @@ export class EditorComponent implements OnInit, AfterViewInit {
   }
 
   myFormModel = new DfGroupModel([
-    new DfInputModel({
-      id: 'input',
-      label: '输入框',
-      value: '123'
-    }),
-    new DfSwitchModel({
-      id: 'switch1',
-      label: '开关1',
-      value: true,
-    }),
-    new DfSwitchModel({
-      id: 'switch2',
-      label: '开关2',
-      value: true,
-    }),
-    new DfRadioModel({
-      id: 'radio',
-      label: '性别',
-      nzRadio: [
-        {
-          label: '男',
-          value: 1,
-        },
-        {
-          label: '女',
-          value: 0,
-        }
-      ],
-      description: '当switch1和switch2同时打开时候展示',
-      listeners: [
-        // 使用set语法糖解决大多数场景
-        {
-          watch: ['switch1', 'switch2'],
-          when: (switch1Value, switch2Value) => {
-            return !!switch1Value && !!switch2Value;
-          },
-          set: {
-            disabled: [true, false],
-          },
-          
-        },
-        // 使用do， otherwise解决边界场景
-        {
-          watch: ['input'],
-          when: (inputValue) => {
-            return inputValue == '123';
-          },
-         do(self) {
-            console.log('%c 满足条件','color: green;')
-            self.description = '满足条件';
-          },
-          otherwise(self) {
-            console.log('%c 不满足条件','color: red;')
-            self.description = '不满足条件';
-          }
-        }
-      ]
-    }),
-    new DfSelectModel({
-      id: 'select',
-      label: '城市',
-      nzOptions: [
-        {
-          label: '杭州',
-          value: 'hangzhou'
-        },
-        {
-          label: '南京',
-          value: 'nanjing'
-        }
-      ],
-      listeners: [
-        {
-          watch: ['radio'],
-          when: (radioValue) => radioValue === 1,
-          set: {
-            disabled: [true, false]
-          }
-        }
-      ]
-    }),
-    new DfTextAreaModel({
-      id: 'textArea',
-      label: '备注',
-      visible: false,
-      listeners: [
-        {
-          watch: ['select'],
-          when: (selectValue) => selectValue === 'nanjing',
-          set: {
-            visible: [true, false]
-          }
-        }
-      ]
-    })
+      // new DfInputModel({
+      //   id: 'input',
+      //   label: '输入框',
+      //   value: '123'
+      // }),
+      // new DfSwitchModel({
+      //   id: 'switch1',
+      //   label: '开关1',
+      //   value: true,
+      // }),
+      // new DfSwitchModel({
+      //   id: 'switch2',
+      //   label: '开关2',
+      //   value: true,
+      // }),
+      // new DfRadioModel({
+      //   id: 'radio',
+      //   label: '性别',
+      //   nzRadio: [
+      //     {
+      //       label: '男',
+      //       value: 1,
+      //     },
+      //     {
+      //       label: '女',
+      //       value: 0,
+      //     }
+      //   ],
+      //   description: '当switch1和switch2同时打开时候展示',
+      //   listeners: [
+      //     // 使用set语法糖解决大多数场景
+      //     {
+      //       watch: ['switch1', 'switch2'],
+      //       when: (switch1Value, switch2Value) => {
+      //         return !!switch1Value && !!switch2Value;
+      //       },
+      //       set: {
+      //         disabled: [true, false],
+      //       },
+            
+      //     },
+      //     // 使用do， otherwise解决边界场景
+      //     {
+      //       watch: ['input'],
+      //       when: (inputValue) => {
+      //         return inputValue == '123';
+      //       },
+      //     do(self) {
+      //         console.log('%c 满足条件','color: green;')
+      //         self.description = '满足条件';
+      //       },
+      //       otherwise(self) {
+      //         console.log('%c 不满足条件','color: red;')
+      //         self.description = '不满足条件';
+      //       }
+      //     }
+      //   ]
+      // }),
+      // new DfSelectModel({
+      //   id: 'select',
+      //   label: '城市',
+      //   nzOptions: [
+      //     {
+      //       label: '杭州',
+      //       value: 'hangzhou'
+      //     },
+      //     {
+      //       label: '南京',
+      //       value: 'nanjing'
+      //     }
+      //   ],
+      //   listeners: [
+      //     {
+      //       watch: ['radio'],
+      //       when: (radioValue) => radioValue === 1,
+      //       set: {
+      //         disabled: [true, false]
+      //       }
+      //     }
+      //   ]
+      // }),
+      // new DfTextAreaModel({
+      //   id: 'textArea',
+      //   label: '备注',
+      //   visible: false,
+      //   listeners: [
+      //     {
+      //       watch: ['select'],
+      //       when: (selectValue) => selectValue === 'nanjing',
+      //       set: {
+      //         visible: [true, false]
+      //       }
+      //     }
+      //   ]
+      // })
     ],
   {
     layout: 'horizontal',
