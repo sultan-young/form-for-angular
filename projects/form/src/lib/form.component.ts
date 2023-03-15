@@ -15,8 +15,6 @@ export class FormComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-
-
     
   }
 

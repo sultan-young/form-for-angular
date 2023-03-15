@@ -1,9 +1,9 @@
-import { AfterContentInit, AfterViewInit, Component, ElementRef, OnInit, TemplateRef, Type, ViewChild } from '@angular/core';
+import { AfterContentInit, AfterViewInit, Component, ElementRef, Inject, OnInit, TemplateRef, Type, ViewChild } from '@angular/core';
 import { debounceTime, fromEvent, tap, throttleTime } from 'rxjs';
 import { HostDirective } from '../../common/directive/host.directive';
-import { InputComponent } from '../../ui-components/input/input.component';
-import { ControlRelationList } from '../controls-panel/controls.config';
 import { ControlWrapComponent } from '../../common/components/control-wrap/control-wrap.component';
+import { COMPONENT_CONFIG_TOKEN } from '../../token';
+import { InjectComponentConfig } from '../../form.type';
 
 
 const MARK_LINE_OFFSET = 30;
@@ -17,7 +17,10 @@ export class EditorComponent implements OnInit, AfterViewInit {
   @ViewChild(HostDirective, {static: true}) host!: HostDirective;
   @ViewChild('editorContainerRef') editorContainerRef!: ElementRef<HTMLElement>
 
-  constructor() { }
+  constructor(
+    @Inject(COMPONENT_CONFIG_TOKEN) public componentConfig: InjectComponentConfig,
+  ) {
+  }
 
   ngOnInit(): void {
     
@@ -81,7 +84,9 @@ export class EditorComponent implements OnInit, AfterViewInit {
       // prevent default action (open as link for some elements)
       // event.preventDefault();
       const key = event.dataTransfer?.getData('control_key');
-      const targetComponent = ControlRelationList.find(item => item.key === key)?.component;
+
+
+      const targetComponent = this.componentConfig.find(item => item.key === key)?.component;
       if (targetComponent) {
         this.appendComponent(targetComponent)
       }
