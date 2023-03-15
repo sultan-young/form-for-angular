@@ -4,17 +4,11 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    .editor-operation {
-        height: 60px;
-        border: 1px dotted #CCCCCC;
-        background-color: #fff;
-        text-align: center;
-    }
     .editor-main {
-        margin: 10px;
         background-color: #fff;
         flex: 1;
         position: relative;
+        display: flex;
         .mark-line {
             background-color: rgb(6, 191, 181);
             z-index: 1;

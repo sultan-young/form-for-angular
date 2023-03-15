@@ -4,10 +4,12 @@ import { HostDirective } from '../../common/directive/host.directive';
 import { ControlWrapComponent } from '../../common/components/control-wrap/control-wrap.component';
 import { COMPONENT_CONFIG_TOKEN } from '../../token';
 import { InjectComponentConfig } from '../../form.type';
+import { BusService } from '../../common/service/bus.service';
 
 
 const MARK_LINE_OFFSET = 30;
-
+let markLineFinallyY = 0;
+let insert_index = 0;
 @Component({
   selector: 'lib-editors-panel',
   templateUrl: './editor.component.html',
@@ -16,16 +18,22 @@ const MARK_LINE_OFFSET = 30;
 export class EditorComponent implements OnInit, AfterViewInit {
   @ViewChild(HostDirective, {static: true}) host!: HostDirective;
   @ViewChild('editorContainerRef') editorContainerRef!: ElementRef<HTMLElement>
+  public direction: 'Horizontal' | 'Vertical' = 'Horizontal'
 
   constructor(
     @Inject(COMPONENT_CONFIG_TOKEN) public componentConfig: InjectComponentConfig,
     private cd: ChangeDetectorRef,
+    public busService: BusService,
   ) {
   }
 
   ngOnInit(): void {
-    let mark_line = document.querySelector('.mark-line') as HTMLDivElement;
-    console.log('mark_line: 123', mark_line);
+    this.busService.hooks.operationMessage.subscribe(action => {
+      if (action.type === 'LayoutChange') {
+        this.direction = action.payload === 'Horizontal' ? 'Horizontal' : 'Vertical';
+      }
+      
+    })
   }
 
   ngAfterViewInit(): void {
@@ -46,8 +54,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
       throttleTime(30),
     ).subscribe(event => {
       const nodeList = Array.from(editorContainerEL.querySelectorAll('lib-control-wrap'));
-
-      // 真实的位置像上便宜30px，防止遮挡视野
+      // 真实的位置像上偏移30px，防止遮挡视野
       const mouseOffsetY = event.clientY - MARK_LINE_OFFSET;
       // 标线的真实位置还需要减去容器到顶部的距离
       let markLineOffsetY = mouseOffsetY - editorContainerClientY;
@@ -55,20 +62,38 @@ export class EditorComponent implements OnInit, AfterViewInit {
 
       // 当前鼠标所在位置控件
       let targetEl;
+      let targetELIndex = 0;
+      
       for (let i = 0; i < nodeList.length; i++) {
         let elRect = nodeList[i].getBoundingClientRect();
         const { y, height } = elRect;
         // 鼠标在某个控件之间
         if (mouseOffsetY > y && mouseOffsetY < y + height) {
           targetEl = nodeList[i];
+          targetELIndex = i;
           break;
         }
+      };
+      
+      if (targetEl) {
+        const { y, height } = targetEl.getBoundingClientRect();
+        const TargetElMiddleLineY = y + (height / 2);
+        if (mouseOffsetY < TargetElMiddleLineY) {
+          markLineFinallyY = y - editorContainerClientY;
+          insert_index = targetELIndex;
+          console.log('上边');
+        } else {
+          markLineFinallyY = y - editorContainerClientY + height;
+          insert_index = targetELIndex + 1;
+          console.log('下边');
+        }
       }
+
       // prevent default to allow drop
       // console.log('event: dragover', event);
       if (mark_line) {
         // 限制标线出容器
-        mark_line.style.transform = `translateY(${markLineOffsetY}px)`
+        mark_line.style.transform = `translateY(${markLineFinallyY}px)`
       }
     })
 
