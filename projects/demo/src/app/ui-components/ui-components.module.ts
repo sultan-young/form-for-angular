@@ -4,10 +4,14 @@ import { CheckboxComponent } from './checkbox/checkbox.component';
 import { InputComponent } from './input/input.component';
 import { RadioComponent } from './radio/radio.component';
 import { SelectComponent } from './select/select.component';
-
+import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NzCheckboxModule,
   ],
   declarations: [
     CheckboxComponent,

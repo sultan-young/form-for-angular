@@ -6,6 +6,7 @@ import { CheckboxComponent } from './ui-components/checkbox/checkbox.component';
 import { InputComponent } from './ui-components/input/input.component';
 import { RadioComponent } from './ui-components/radio/radio.component';
 import { SelectComponent } from './ui-components/select/select.component';
+import { UiComponentsModule } from './ui-components/ui-components.module';
 
 @NgModule({
   declarations: [
@@ -13,7 +14,7 @@ import { SelectComponent } from './ui-components/select/select.component';
   ],
   imports: [
     BrowserModule,
-    
+    UiComponentsModule,
     LowFormModule.forRoot([
       {
         name: '多选框',

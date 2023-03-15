@@ -1,4 +1,4 @@
-import { AfterContentInit, AfterViewInit, Component, ElementRef, Inject, OnInit, TemplateRef, Type, ViewChild } from '@angular/core';
+import { AfterContentInit, AfterViewInit, ChangeDetectorRef, Component, ElementRef, Inject, OnInit, TemplateRef, Type, ViewChild } from '@angular/core';
 import { debounceTime, fromEvent, tap, throttleTime } from 'rxjs';
 import { HostDirective } from '../../common/directive/host.directive';
 import { ControlWrapComponent } from '../../common/components/control-wrap/control-wrap.component';
@@ -19,11 +19,13 @@ export class EditorComponent implements OnInit, AfterViewInit {
 
   constructor(
     @Inject(COMPONENT_CONFIG_TOKEN) public componentConfig: InjectComponentConfig,
+    private cd: ChangeDetectorRef,
   ) {
   }
 
   ngOnInit(): void {
-    
+    let mark_line = document.querySelector('.mark-line') as HTMLDivElement;
+    console.log('mark_line: 123', mark_line);
   }
 
   ngAfterViewInit(): void {
@@ -62,7 +64,6 @@ export class EditorComponent implements OnInit, AfterViewInit {
           break;
         }
       }
-      console.log('event: ',  targetEl );
       // prevent default to allow drop
       // console.log('event: dragover', event);
       if (mark_line) {
@@ -98,6 +99,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
     const viewContainerRef = this.host.viewContainerRef;
     const componentRef = viewContainerRef.createComponent<ControlWrapComponent>(ControlWrapComponent);
     componentRef.instance.component = component;
+    this.cd.detectChanges()
     // const componentRef1 = viewContainerRef.createComponent(component);
     // componentRef.instance.component = componentRef1;
   }
