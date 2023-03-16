@@ -3,7 +3,7 @@ import { debounceTime, fromEvent, tap, throttleTime } from 'rxjs';
 import { HostDirective } from '../../common/directive/host.directive';
 import { ControlWrapComponent } from '../../common/components/control-wrap/control-wrap.component';
 import { COMPONENT_CONFIG_TOKEN } from '../../token';
-import { InjectComponentConfig } from '../../form.type';
+import { ComponentMetaConfig } from '../../form.type';
 import { BusService } from '../../common/service/bus.service';
 
 
@@ -21,7 +21,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
   public direction: 'Horizontal' | 'Vertical' = 'Horizontal'
 
   constructor(
-    @Inject(COMPONENT_CONFIG_TOKEN) public componentConfig: InjectComponentConfig,
+    @Inject(COMPONENT_CONFIG_TOKEN) public componentConfig: ComponentMetaConfig,
     private cd: ChangeDetectorRef,
     public busService: BusService,
   ) {
@@ -110,22 +110,21 @@ export class EditorComponent implements OnInit, AfterViewInit {
       // prevent default action (open as link for some elements)
       // event.preventDefault();
       const key = event.dataTransfer?.getData('control_key');
+      
+      if (!key) return;
 
-
-      const targetComponent = this.componentConfig.find(item => item.key === key)?.component;
-      if (targetComponent) {
-        this.appendComponent(targetComponent)
-      }
+      this.appendComponent(key)
       mark_line.style.display = 'none';
     })
   }
 
-  appendComponent(component: Type<any>) {
+  appendComponent(key: string) {
+    const target = this.componentConfig.find(item => item.key === key);
+    if (!target) return;
+
     const viewContainerRef = this.host.viewContainerRef;
-    console.log('viewContainerRef: ', viewContainerRef);
     const componentRef = viewContainerRef.createComponent<ControlWrapComponent>(ControlWrapComponent);
-    console.log('componentRef: ', componentRef);
-    componentRef.instance.component = component;
-    this.cd.detectChanges()
+    componentRef.instance.componentMeta = target;
+    this.cd.detectChanges();
   }
 }

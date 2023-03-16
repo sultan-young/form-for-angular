@@ -1,0 +1,36 @@
+.select-wrap {
+    position: fixed;
+    top: 0;
+    left: 0;
+    border: 1px dashed rgb(34, 183, 242);
+    background-color: transparent;
+    z-index: 1000;
+    pointer-events: none;
+    .name {
+        position: absolute;
+        left: 0;
+        font-size: 14px;
+        height: 20px;
+        top: -22px;
+        font-weight: 350;
+    }
+    .actions {
+        position: absolute;
+        right: 0;
+        height: 22px;
+        top: -24px;
+        display: flex;
+        width: auto;
+        align-items: center;
+        justify-content: flex-end;
+        &-item {
+            pointer-events: visible;
+            cursor: pointer;
+            width: 24px;
+            height: 24px;
+            mat-icon {
+                transform: scale(0.8);
+            }
+        }
+    }
+}

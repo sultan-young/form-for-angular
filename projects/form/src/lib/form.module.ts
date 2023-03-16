@@ -3,7 +3,7 @@ import { FormComponent } from './form.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LayoutsModule } from './layouts/layouts.module';
-import { InjectComponentConfig } from './form.type';
+import { ComponentMetaConfig } from './form.type';
 import { COMPONENT_CONFIG_TOKEN } from './token';
 
 @NgModule({
@@ -21,14 +21,14 @@ import { COMPONENT_CONFIG_TOKEN } from './token';
 })
 export class LowFormModule { 
   // 想实现的效果是传过来的组件配置可以直接在low form中使用
-  static forRoot(injectComponentConfig: InjectComponentConfig): ModuleWithProviders<LowFormModule> {
-    console.log('injectComponentConfig: ', injectComponentConfig[0]);
+  static forRoot(ComponentMetaConfig: ComponentMetaConfig): ModuleWithProviders<LowFormModule> {
+    console.log('ComponentMetaConfig: ', ComponentMetaConfig[0]);
     
     return {
       ngModule: LowFormModule,
       providers: [{
         provide: COMPONENT_CONFIG_TOKEN,
-        useValue: injectComponentConfig,
+        useValue: ComponentMetaConfig,
       }]
     }
   }

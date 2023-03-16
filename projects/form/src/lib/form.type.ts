@@ -1,11 +1,11 @@
 import { Type } from "@angular/core";
 
-interface InjectComponent {
+export interface ComponentMeta {
   name: string;
   key: string;
   component: Type<any>;
 }
-export type InjectComponentConfig = InjectComponent[];
+export type ComponentMetaConfig = ComponentMeta[];
 
 // 组件实例接口
 export interface ComponentInstance {

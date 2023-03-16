@@ -2,7 +2,7 @@ import { AfterViewInit, Component, Directive, ElementRef, Inject, InjectionToken
 import { fromEvent } from 'rxjs';
 import { LowFormModule} from '../../form.module';
 import { COMPONENT_CONFIG_TOKEN } from '../../token';
-import { InjectComponentConfig } from '../../form.type';
+import { ComponentMetaConfig } from '../../form.type';
 
 const MK_URL_TOKEN = new InjectionToken<string>('markdown_sourceurl', {
   factory() {
@@ -24,7 +24,7 @@ export class ControlsPanelComponent implements OnInit, AfterViewInit {
   @ViewChildren('controlRef') controls!: QueryList<ElementRef<HTMLDivElement>>;
 
   constructor(
-    @Inject(COMPONENT_CONFIG_TOKEN) public componentConfig: InjectComponentConfig,
+    @Inject(COMPONENT_CONFIG_TOKEN) public componentConfig: ComponentMetaConfig,
   ) {
   }
 
