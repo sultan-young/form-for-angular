@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'lib-checkbox',
@@ -6,6 +6,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./checkbox.component.css']
 })
 export class CheckboxComponent implements OnInit {
+  @Input() prop1 = 1;
+  public value = 2;
+  // NOTE: 在这里只需要以某种方式约定prop，之后再视图上呈现出来
+  @Input() options = [];
+  
   checkOptionsOne = [
     { label: 'Apple', value: 'Apple', checked: true },
     { label: 'Pear', value: 'Pear' },

@@ -9,6 +9,8 @@
         flex: 1;
         position: relative;
         display: flex;
+        flex-wrap: wrap;
+        align-content: flex-start;
         .mark-line {
             background-color: rgb(6, 191, 181);
             z-index: 1;

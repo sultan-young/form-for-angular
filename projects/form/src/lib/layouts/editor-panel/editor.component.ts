@@ -122,10 +122,10 @@ export class EditorComponent implements OnInit, AfterViewInit {
 
   appendComponent(component: Type<any>) {
     const viewContainerRef = this.host.viewContainerRef;
+    console.log('viewContainerRef: ', viewContainerRef);
     const componentRef = viewContainerRef.createComponent<ControlWrapComponent>(ControlWrapComponent);
+    console.log('componentRef: ', componentRef);
     componentRef.instance.component = component;
     this.cd.detectChanges()
-    // const componentRef1 = viewContainerRef.createComponent(component);
-    // componentRef.instance.component = componentRef1;
   }
 }

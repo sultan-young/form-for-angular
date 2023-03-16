@@ -22,8 +22,8 @@ import { COMPONENT_CONFIG_TOKEN } from './token';
 export class LowFormModule { 
   // 想实现的效果是传过来的组件配置可以直接在low form中使用
   static forRoot(injectComponentConfig: InjectComponentConfig): ModuleWithProviders<LowFormModule> {
-    console.log('injectComponentConfig: ', injectComponentConfig);
-
+    console.log('injectComponentConfig: ', injectComponentConfig[0]);
+    
     return {
       ngModule: LowFormModule,
       providers: [{
