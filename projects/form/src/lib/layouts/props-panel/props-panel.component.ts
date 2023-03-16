@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ComponentInstance } from '../../form.type';
+import { RXElement } from '../../form.type';
 
 @Component({
   selector: 'lib-props-panel',
@@ -7,7 +7,7 @@ import { ComponentInstance } from '../../form.type';
   styleUrls: ['./props-panel.component.scss']
 })
 export class PropsPanelComponent implements OnInit {
-  @Input() instance!: ComponentInstance;
+  @Input() instance!: RXElement;
 
   constructor() { }
 

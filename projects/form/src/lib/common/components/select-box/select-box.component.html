@@ -1,11 +1,14 @@
 <div class="select-wrap" #boxEl [style]="style" [hidden]="!show">
-    <div class="name">组件名称</div>
-    <div class="actions">
-        <div class="actions-item">
-            <mat-icon class="actions-item" svgIcon="thumbs-up"></mat-icon>
-        </div>
-        <div class="actions-item">
-            <mat-icon class="actions-item" svgIcon="thumbs-up"></mat-icon>
-        </div>
+  <ng-container [ngSwitch]="true">
+    <div *ngSwitchCase="(status$ | async) === Status.Hover" class="name">组件名称</div>
+
+    <div *ngSwitchCase="(status$ | async) === Status.Selected" class="actions">
+      <div class="actions-item">
+        <mat-icon class="actions-item" svgIcon="thumbs-up"></mat-icon>
+      </div>
+      <div class="actions-item">
+        <mat-icon class="actions-item" svgIcon="thumbs-up"></mat-icon>
+      </div>
     </div>
+  </ng-container>
 </div>

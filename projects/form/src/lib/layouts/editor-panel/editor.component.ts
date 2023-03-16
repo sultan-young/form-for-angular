@@ -5,6 +5,7 @@ import { ControlWrapComponent } from '../../common/components/control-wrap/contr
 import { COMPONENT_CONFIG_TOKEN } from '../../token';
 import { ComponentMetaConfig } from '../../form.type';
 import { BusService } from '../../common/service/bus.service';
+import { EditingElementsService } from '../../common/service/editingElements.service';
 
 
 const MARK_LINE_OFFSET = 30;
@@ -24,6 +25,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
     @Inject(COMPONENT_CONFIG_TOKEN) public componentConfig: ComponentMetaConfig,
     private cd: ChangeDetectorRef,
     public busService: BusService,
+    public editingElementsService: EditingElementsService,
   ) {
   }
 

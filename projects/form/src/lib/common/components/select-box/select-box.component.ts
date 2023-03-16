@@ -6,9 +6,10 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { MouseService } from '../../service/mouse.service';
-import { ComponentMeta } from '../../../form.type';
+import { RXElement } from '../../../form.type';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatIconRegistry } from '@angular/material/icon';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 const THUMBUP_ICON =
   `
@@ -20,6 +21,12 @@ const THUMBUP_ICON =
   </svg>
 `;
 
+enum Status {
+  Hover,
+  Selected,
+  None,
+}
+
 @Component({
   selector: 'lib-select-box',
   templateUrl: './select-box.component.html',
@@ -27,7 +34,9 @@ const THUMBUP_ICON =
 })
 export class SelectBoxComponent implements OnInit {
   @ViewChild('boxEl') boxEl!: ElementRef<HTMLDivElement>;
-  public componentMeta!: ComponentMeta;
+  public rxElement!: RXElement;
+  public Status = Status;
+  public status$ = new BehaviorSubject<Status>(Status.Selected);
 
   public show = true;
 
@@ -35,6 +44,7 @@ export class SelectBoxComponent implements OnInit {
     transform: 'translate(110px, 110px)',
     height: '30px',
     width: '200px',
+    border: '1px dashed rgb(34, 183, 242)',
   };
 
   constructor(
@@ -49,19 +59,45 @@ export class SelectBoxComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.mouseService.hooks.selectElement.subscribe((selectElement) => {
+    this.addListener()
+    this.mouseService.hooks.hoverSelectElement.subscribe((selectElement) => {
       const { x, y, width, height } =
         selectElement.host.getBoundingClientRect();
       this.show = true;
-      this.componentMeta = selectElement.componentMeta;
+      this.status$.next(Status.Hover)
+      this.rxElement = selectElement;
       this.setStyle({ x, y, width, height });
     });
 
     this.mouseService.hooks.cancelSelectElement.subscribe((selectElement) => {
-      const { x, y, width, height } =
-        selectElement.host.getBoundingClientRect();
       this.show = false;
+      this.status$.next(Status.None);
     });
+
+    this.mouseService.hooks.selectElement.subscribe((selectElement) => {
+      this.show = true;
+      this.status$.next(Status.Selected);
+    });
+
+    
+  }
+
+  addListener() {
+    this.addStatusListener();
+  }
+
+  addStatusListener() {
+    this.status$.subscribe(status => {
+      let style = {
+        ...this.style,
+      }
+      if (status === Status.Selected) {
+        style.border = '2px solid rgb(34, 183, 242)'
+      } else if (status === Status.Hover) {
+        style.border = '1px dashed rgb(34, 183, 242)'
+      }
+      this.style = style;
+    })
   }
 
   setStyle(style: { x: number; y: number; width: number; height: number }) {

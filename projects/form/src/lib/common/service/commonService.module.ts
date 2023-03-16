@@ -1,12 +1,13 @@
 import { NgModule } from "@angular/core";
 import { BusService } from "./bus.service";
 import { MouseService } from "./mouse.service";
-import { Subject } from "rxjs";
+import { EditingElementsService } from "./editingElements.service";
 
 @NgModule({
     providers: [
         BusService,
         MouseService,
+        EditingElementsService,
     ]
 })
 export class CommonServiceModule {

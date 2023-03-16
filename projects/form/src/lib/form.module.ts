@@ -21,14 +21,13 @@ import { COMPONENT_CONFIG_TOKEN } from './token';
 })
 export class LowFormModule { 
   // 想实现的效果是传过来的组件配置可以直接在low form中使用
-  static forRoot(ComponentMetaConfig: ComponentMetaConfig): ModuleWithProviders<LowFormModule> {
-    console.log('ComponentMetaConfig: ', ComponentMetaConfig[0]);
+  static forRoot(componentMetaConfig: ComponentMetaConfig): ModuleWithProviders<LowFormModule> {
     
     return {
       ngModule: LowFormModule,
       providers: [{
         provide: COMPONENT_CONFIG_TOKEN,
-        useValue: ComponentMetaConfig,
+        useValue: componentMetaConfig,
       }]
     }
   }

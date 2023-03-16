@@ -2,11 +2,13 @@
     position: fixed;
     top: 0;
     left: 0;
-    border: 1px dashed rgb(34, 183, 242);
     background-color: transparent;
     z-index: 1000;
     pointer-events: none;
     .name {
+        background-color: #1890ffee;
+        color: #fff;
+        padding: 0px 2px;
         position: absolute;
         left: 0;
         font-size: 14px;
