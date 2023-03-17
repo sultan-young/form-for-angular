@@ -6,7 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./radio.component.css']
 })
 export class RadioComponent implements OnInit {
-
+  radioValue = 'A';
+  
   constructor() { }
 
   ngOnInit() {

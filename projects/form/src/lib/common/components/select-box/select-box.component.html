@@ -1,6 +1,6 @@
 <div class="select-wrap" #boxEl [style]="style" [hidden]="!show">
   <ng-container [ngSwitch]="true">
-    <div *ngSwitchCase="(status$ | async) === Status.Hover" class="name">组件名称</div>
+    <div *ngSwitchCase="(status$ | async) === Status.Hover" class="name">{{rxElement.name}}</div>
 
     <div *ngSwitchCase="(status$ | async) === Status.Selected" class="actions">
       <div class="actions-item">

@@ -43,7 +43,7 @@ export class SelectBoxComponent implements OnInit {
   public show = false;
 
   public style = {
-    transform: 'translate(0px, 0px)',
+    transform: 'translate(-px, 0px)',
     height: '30px',
     width: '200px',
     border: '1px dashed rgb(34, 183, 242)',
@@ -67,6 +67,7 @@ export class SelectBoxComponent implements OnInit {
     this.mouseService.hooks.hoverSelectElement.subscribe((selectElement) => {
       if (this.status$.value === Status.Selected) return;
 
+      this.rxElement = selectElement;
       const { x, y, width, height } =
         selectElement.host.getBoundingClientRect();
       this.status$.next(Status.Hover)
@@ -84,6 +85,7 @@ export class SelectBoxComponent implements OnInit {
         this.destroySelf();
         return;
       }
+      if (!this.rxElement) return;
       this.rxElement = selectElement;
       this.status$.next(Status.Selected);
     });

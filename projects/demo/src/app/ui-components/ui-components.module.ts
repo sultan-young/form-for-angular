@@ -5,6 +5,8 @@ import { InputComponent } from './input/input.component';
 import { RadioComponent } from './radio/radio.component';
 import { SelectComponent } from './select/select.component';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
+import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 @NgModule({
   imports: [
@@ -12,6 +14,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     FormsModule,
     ReactiveFormsModule,
     NzCheckboxModule,
+    NzSelectModule,
+    NzRadioModule,
   ],
   declarations: [
     CheckboxComponent,
@@ -24,6 +28,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     InputComponent,
     RadioComponent,
     SelectComponent,
+    NzSelectModule,
   ],
 })
 export class UiComponentsModule { }

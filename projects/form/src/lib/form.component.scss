@@ -18,12 +18,15 @@
     display: flex;
     margin-top: 10px;
     flex: 1;
+    lib-controls-panel {
+        width: 240px;
+    }
     lib-editors-panel {
         flex: 1;
         margin-left: 10px;
     }
     lib-props-panel {
-        width: 130px;
+        width: 240px;
         margin-left: 10px;
         background-color: #fff;
     }

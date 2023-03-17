@@ -30,9 +30,9 @@ export class EditingElementsService {
         const hostEl = element.host;
         const mouseEnter$ = fromEvent<MouseEvent>(hostEl, 'mouseenter');
         const mouseLeave$ = fromEvent<MouseEvent>(hostEl, 'mouseleave');
-        const mouseClick$ = fromEvent<MouseEvent>(hostEl, 'click');
-    
-        let isSelected = false;
+        const mouseClick$ = fromEvent<MouseEvent>(hostEl, 'click', {
+            capture: true,
+        });
     
         mouseEnter$.pipe(
         ).subscribe((event) => {
@@ -46,7 +46,9 @@ export class EditingElementsService {
     
         // 当选中元素后，元素不再响应 enter 和 leave事件，直到重新接受到 释放点击状态的事件
         mouseClick$.pipe(
-        ).subscribe(_ => {
+        ).subscribe(event => {
+          event.stopPropagation();
+          event.preventDefault()
           this.mouseService.hooks.selectElement.next(element);
         })
         // mergeMap(_ => this.mouseService.hooks.selectElement)
