@@ -2,7 +2,7 @@ import { Directive, OnInit, ViewContainerRef } from '@angular/core';
 import { SelectBoxComponent } from '../components/select-box/select-box.component';
 import { MouseService } from '../service/mouse.service';
 import { distinctUntilKeyChanged, startWith } from 'rxjs';
-import { RXElement } from '../../form.type';
+import { RxELementModel } from '../../model/element.model';
 
 @Directive({
   selector: '[select-box]',
@@ -17,7 +17,7 @@ export class SelectBoxDirective implements OnInit{
     
     // 当有选中元素的时候，新增一个选中框
     this.mouseService.hooks.selectElement.pipe(
-        distinctUntilKeyChanged<RXElement>('uid'),
+        distinctUntilKeyChanged<RxELementModel>('uid'),
         startWith(null),
     ).subscribe(rxElement => {
         this.createSelectBox()

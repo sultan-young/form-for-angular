@@ -1,8 +1,9 @@
-import { Type } from "@angular/core";
+import { ComponentRef, Type } from "@angular/core";
 
 export interface RXElement extends ComponentMeta{
   uid: string;
   host: HTMLElement,
+  componentRef: ComponentRef<any>,
   props?: {
     [prop: string]: unknown
   }

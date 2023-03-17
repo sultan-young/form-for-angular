@@ -3,10 +3,7 @@
     <div *ngSwitchCase="(status$ | async) === Status.Hover" class="name">{{rxElement.name}}</div>
 
     <div *ngSwitchCase="(status$ | async) === Status.Selected" class="actions">
-      <div class="actions-item">
-        <mat-icon class="actions-item" svgIcon="thumbs-up"></mat-icon>
-      </div>
-      <div class="actions-item">
+      <div class="actions-item" (click)="deleteElement()">
         <mat-icon class="actions-item" svgIcon="thumbs-up"></mat-icon>
       </div>
     </div>

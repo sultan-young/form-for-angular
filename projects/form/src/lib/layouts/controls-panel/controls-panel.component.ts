@@ -49,5 +49,4 @@ export class ControlsPanelComponent implements OnInit, AfterViewInit {
       // console.log(event, 'dragend');
     })
   }
-
 }

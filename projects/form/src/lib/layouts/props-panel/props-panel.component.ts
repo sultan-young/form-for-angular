@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { RXElement } from '../../form.type';
 import { MouseService } from '../../common/service/mouse.service';
+import { RxELementModel } from '../../model/element.model';
 
 @Component({
   selector: 'lib-props-panel',
@@ -8,7 +8,7 @@ import { MouseService } from '../../common/service/mouse.service';
   styleUrls: ['./props-panel.component.scss']
 })
 export class PropsPanelComponent implements OnInit {
-  public rxElement!: RXElement;
+  public rxElement!: RxELementModel;
 
   constructor(
     private mouseService: MouseService,

@@ -1,61 +1,80 @@
-import { Injectable } from "@angular/core";
-import { RXElement } from "../../form.type";
-import { MouseService } from "./mouse.service";
+import { Injectable } from '@angular/core';
+import { MouseService } from './mouse.service';
 import { fromEvent, map, mergeMap, switchMap, takeUntil } from 'rxjs';
+import { HistoryService } from './history.service';
+import { RxELementModel } from '../../model/element.model';
+
+type uid = string;
+interface ELementsObj {
+  [uid: uid]: RxELementModel;
+}
 
 @Injectable()
 export class EditingElementsService {
-   private elements: RXElement[] = [];
-   public hooks = {}
+  private elementsProxy: ELementsObj = new Proxy<ELementsObj>({}, {
+    set(target, prop, newValue, receiver) {
+      target[prop as any] = newValue;
+      return true;
+    },
+    deleteProperty(target, propKey) {
+      if (target.hasOwnProperty(propKey) && typeof propKey !== 'symbol') {
+        const rxElement = target[propKey];
+        rxElement.onDestroy()
+        delete target[propKey as any];
+        return true;
+      }
+      return false;
+    },
+  });
+  public hooks = {};
 
-    constructor(
-        private mouseService: MouseService,
-    ) {
-        const { selectElement, cancelSelectElement } = this.mouseService.hooks;
-        selectElement.subscribe(selectedElement => {
-            this.elements.push(selectedElement)
-        });
-        cancelSelectElement.subscribe(selectElement => {
-            this.elements = this.elements.filter(element => element.uid !== selectElement.uid);
-        });
+  constructor(
+    private mouseService: MouseService,
+    private historyService: HistoryService
+  ) {}
+
+  getElements() {
+    return this.elementsProxy;
+  }
+
+  addElement(element: RxELementModel): number {
+    this.elementsProxy[element.uid] = element;
+    const hostEl = element.hostEl;
+    const mouseEnter$ = fromEvent<MouseEvent>(hostEl, 'mouseenter');
+    const mouseLeave$ = fromEvent<MouseEvent>(hostEl, 'mouseleave');
+    const mouseClick$ = fromEvent<MouseEvent>(hostEl, 'click', {
+      capture: true,
+    });
+
+    mouseEnter$.pipe().subscribe((event) => {
+      this.mouseService.hooks.hoverSelectElement.next(element);
+    });
+
+    mouseLeave$.pipe().subscribe((_) => {
+      this.mouseService.hooks.leaveSelectElement.next(element);
+    });
+    // 当选中元素后，元素不再响应 enter 和 leave事件，直到重新接受到 释放点击状态的事件
+    mouseClick$.pipe().subscribe((event) => {
+      event.stopPropagation();
+      event.preventDefault();
+      this.mouseService.hooks.selectElement.next(element);
+    });
+    // mergeMap(_ => this.mouseService.hooks.selectElement)
+    return this.getSize();
+  }
+
+  deleteElements(uid: string): boolean {
+    const rxElement = this.elementsProxy[uid];
+
+    if (rxElement) {
+      // this.elements[beDeletedElementIndex].destroy();
+      delete this.elementsProxy[rxElement.uid];
     }
 
-    getElements() {
-        return this.elements;
-    }
+    return !!rxElement;
+  }
 
-    pushElements(element: RXElement): number {
-        this.elements.push(element);
-
-        const hostEl = element.host;
-        const mouseEnter$ = fromEvent<MouseEvent>(hostEl, 'mouseenter');
-        const mouseLeave$ = fromEvent<MouseEvent>(hostEl, 'mouseleave');
-        const mouseClick$ = fromEvent<MouseEvent>(hostEl, 'click', {
-            capture: true,
-        });
-    
-        mouseEnter$.pipe(
-        ).subscribe((event) => {
-          this.mouseService.hooks.hoverSelectElement.next(element);
-        });
-    
-        mouseLeave$.pipe(
-        ).subscribe(_ => {
-          this.mouseService.hooks.leaveSelectElement.next(element)
-        })
-    
-        // 当选中元素后，元素不再响应 enter 和 leave事件，直到重新接受到 释放点击状态的事件
-        mouseClick$.pipe(
-        ).subscribe(event => {
-          event.stopPropagation();
-          event.preventDefault()
-          this.mouseService.hooks.selectElement.next(element);
-        })
-        // mergeMap(_ => this.mouseService.hooks.selectElement)
-        return this.elements.length;
-    }
-
-    getSize() {
-        return this.elements.length;
-    }
+  getSize() {
+    return Object.keys(this.elementsProxy).length;
+  }
 }

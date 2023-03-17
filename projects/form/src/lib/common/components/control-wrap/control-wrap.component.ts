@@ -9,8 +9,6 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { HostDirective } from '../../directive/host.directive';
-import { MouseService } from '../../service/mouse.service';
-import { v4 as uuid } from 'uuid';
 import { ComponentMeta, RXElement } from '../../../form.type';
 
 @Component({
@@ -23,7 +21,6 @@ export class ControlWrapComponent implements OnInit, AfterViewInit {
   @Input() componentMeta!: ComponentMeta;
 
   constructor(
-    private hostViewContainer: ViewContainerRef,
   ) {}
 
   ngOnInit() {}
@@ -31,6 +28,5 @@ export class ControlWrapComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     const viewContainerRef = this.host.viewContainerRef;
     const componentRef = viewContainerRef.createComponent(this.componentMeta.component);
-    
   }
 }

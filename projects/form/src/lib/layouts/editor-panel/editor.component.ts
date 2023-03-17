@@ -7,6 +7,7 @@ import { ComponentMetaConfig } from '../../form.type';
 import { BusService } from '../../common/service/bus.service';
 import { EditingElementsService } from '../../common/service/editingElements.service';
 import { v4 as uuid } from 'uuid';
+import { RxELementModel } from '../../model/element.model';
 
 const MARK_LINE_OFFSET = 30;
 let markLineFinallyY = 0;
@@ -125,11 +126,12 @@ export class EditorComponent implements OnInit, AfterViewInit {
 
     const viewContainerRef = this.host.viewContainerRef;
     const componentRef = viewContainerRef.createComponent<ControlWrapComponent>(ControlWrapComponent);
-    this.editingElementsService.pushElements({
+
+    const rxElement = new RxELementModel({
       ...targetComponentMeta,
-      uid: uuid(),
-      host: componentRef.location.nativeElement,
+      componentRef,
     })
+    this.editingElementsService.addElement(rxElement)
     componentRef.instance.componentMeta = targetComponentMeta;
     this.cd.detectChanges();
   }

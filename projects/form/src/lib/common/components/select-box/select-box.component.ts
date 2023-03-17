@@ -8,10 +8,11 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { MouseService } from '../../service/mouse.service';
-import { RXElement } from '../../../form.type';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatIconRegistry } from '@angular/material/icon';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { EditingElementsService } from '../../service/editingElements.service';
+import { RxELementModel } from '../../../model/element.model';
 
 const THUMBUP_ICON =
   `
@@ -37,7 +38,7 @@ enum Status {
 export class SelectBoxComponent implements OnInit {
   @ViewChild('boxEl') boxEl!: ElementRef<HTMLDivElement>;
   @Input() destroySelf!: () => void;
-  public rxElement!: RXElement;
+  public rxElement!: RxELementModel;
   public Status = Status;
   public status$ = new BehaviorSubject<Status>(Status.None);
   public show = false;
@@ -53,6 +54,7 @@ export class SelectBoxComponent implements OnInit {
     private mouseService: MouseService,
     private selfView: ViewContainerRef,
     private cd: ChangeDetectorRef,
+    private editingElementsService: EditingElementsService,
     iconRegistry: MatIconRegistry,
     sanitizer: DomSanitizer
   ) {
@@ -69,7 +71,7 @@ export class SelectBoxComponent implements OnInit {
 
       this.rxElement = selectElement;
       const { x, y, width, height } =
-        selectElement.host.getBoundingClientRect();
+        selectElement.hostEl.getBoundingClientRect();
       this.status$.next(Status.Hover)
       this.setStyle({ x, y, width, height });
     });
@@ -133,5 +135,11 @@ export class SelectBoxComponent implements OnInit {
       width: width + 'px',
       height: height + 'px',
     };
+  }
+
+  // 删除元素
+  deleteElement() {
+    if (!this.rxElement) return;
+    this.editingElementsService.deleteElements(this.rxElement.uid);
   }
 }
