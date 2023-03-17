@@ -1,8 +1,8 @@
 
 
-<div *ngIf="instance; else empty">
-    <span>组件名称：{{instance.name}}</span>
-    <span>组件id：{{instance.uid}}</span>
+<div *ngIf="rxElement; else empty">
+    <span>组件名称：{{rxElement.name}}</span>
+    <span>组件id：{{rxElement.uid}}</span>
 </div>
 <ng-template #empty>
     请在左侧选中节点

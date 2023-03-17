@@ -16,7 +16,6 @@ export class OperationPanelComponent implements OnInit {
 
   ngOnInit(): void {
     this.toppings.valueChanges.subscribe(value => {
-      console.log('value: ', value);
       this.busService.hooks.operationMessage.next({
         type: 'LayoutChange',
         payload: value,

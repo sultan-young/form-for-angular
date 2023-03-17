@@ -8,6 +8,8 @@ export class MouseService {
     public hooks = {
         // 移动到选中元素
         hoverSelectElement: new Subject<RXElement>(),
+        // 移动到选中元素
+        leaveSelectElement: new Subject<RXElement>(),
         // 选中元素
         selectElement: new Subject<RXElement>(),
         // 取消选中

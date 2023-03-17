@@ -6,7 +6,7 @@ import { COMPONENT_CONFIG_TOKEN } from '../../token';
 import { ComponentMetaConfig } from '../../form.type';
 import { BusService } from '../../common/service/bus.service';
 import { EditingElementsService } from '../../common/service/editingElements.service';
-
+import { v4 as uuid } from 'uuid';
 
 const MARK_LINE_OFFSET = 30;
 let markLineFinallyY = 0;
@@ -34,7 +34,6 @@ export class EditorComponent implements OnInit, AfterViewInit {
       if (action.type === 'LayoutChange') {
         this.direction = action.payload === 'Horizontal' ? 'Horizontal' : 'Vertical';
       }
-      
     })
   }
 
@@ -121,12 +120,17 @@ export class EditorComponent implements OnInit, AfterViewInit {
   }
 
   appendComponent(key: string) {
-    const target = this.componentConfig.find(item => item.key === key);
-    if (!target) return;
+    const targetComponentMeta = this.componentConfig.find(item => item.key === key);
+    if (!targetComponentMeta) return;
 
     const viewContainerRef = this.host.viewContainerRef;
     const componentRef = viewContainerRef.createComponent<ControlWrapComponent>(ControlWrapComponent);
-    componentRef.instance.componentMeta = target;
+    this.editingElementsService.pushElements({
+      ...targetComponentMeta,
+      uid: uuid(),
+      host: componentRef.location.nativeElement,
+    })
+    componentRef.instance.componentMeta = targetComponentMeta;
     this.cd.detectChanges();
   }
 }

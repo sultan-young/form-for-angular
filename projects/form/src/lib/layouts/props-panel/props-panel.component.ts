@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { RXElement } from '../../form.type';
+import { MouseService } from '../../common/service/mouse.service';
 
 @Component({
   selector: 'lib-props-panel',
@@ -7,11 +8,17 @@ import { RXElement } from '../../form.type';
   styleUrls: ['./props-panel.component.scss']
 })
 export class PropsPanelComponent implements OnInit {
-  @Input() instance!: RXElement;
+  public rxElement!: RXElement;
 
-  constructor() { }
+  constructor(
+    private mouseService: MouseService,
+  ) { }
 
   ngOnInit(): void {
+    this.mouseService.hooks.selectElement.subscribe((selectElement) => {
+      // 当有新选中出现时候，如果不是自身选中则释放自己选中态
+      this.rxElement = selectElement;
+    });
   }
 
 }

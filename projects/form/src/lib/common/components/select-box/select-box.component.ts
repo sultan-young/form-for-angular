@@ -1,6 +1,8 @@
 import {
+  ChangeDetectorRef,
   Component,
   ElementRef,
+  Input,
   OnInit,
   ViewChild,
   ViewContainerRef,
@@ -34,14 +36,14 @@ enum Status {
 })
 export class SelectBoxComponent implements OnInit {
   @ViewChild('boxEl') boxEl!: ElementRef<HTMLDivElement>;
+  @Input() destroySelf!: () => void;
   public rxElement!: RXElement;
   public Status = Status;
-  public status$ = new BehaviorSubject<Status>(Status.Selected);
-
-  public show = true;
+  public status$ = new BehaviorSubject<Status>(Status.None);
+  public show = false;
 
   public style = {
-    transform: 'translate(110px, 110px)',
+    transform: 'translate(0px, 0px)',
     height: '30px',
     width: '200px',
     border: '1px dashed rgb(34, 183, 242)',
@@ -49,6 +51,8 @@ export class SelectBoxComponent implements OnInit {
 
   constructor(
     private mouseService: MouseService,
+    private selfView: ViewContainerRef,
+    private cd: ChangeDetectorRef,
     iconRegistry: MatIconRegistry,
     sanitizer: DomSanitizer
   ) {
@@ -61,41 +65,60 @@ export class SelectBoxComponent implements OnInit {
   ngOnInit(): void {
     this.addListener()
     this.mouseService.hooks.hoverSelectElement.subscribe((selectElement) => {
+      if (this.status$.value === Status.Selected) return;
+
       const { x, y, width, height } =
         selectElement.host.getBoundingClientRect();
-      this.show = true;
       this.status$.next(Status.Hover)
-      this.rxElement = selectElement;
       this.setStyle({ x, y, width, height });
     });
 
-    this.mouseService.hooks.cancelSelectElement.subscribe((selectElement) => {
-      this.show = false;
+    this.mouseService.hooks.leaveSelectElement.subscribe((selectElement) => {
+      if (this.status$.value === Status.Selected) return;
       this.status$.next(Status.None);
     });
 
     this.mouseService.hooks.selectElement.subscribe((selectElement) => {
-      this.show = true;
+      // 当有新选中出现时候，如果不是自身选中则释放自己选中态
+      if (this.rxElement && selectElement.uid !== this.rxElement.uid) {
+        this.destroySelf();
+        return;
+      }
+      this.rxElement = selectElement;
       this.status$.next(Status.Selected);
     });
 
-    
+    this.mouseService.hooks.cancelSelectElement.subscribe(_ => {
+      this.status$.next(Status.None);
+    })
   }
 
   addListener() {
     this.addStatusListener();
   }
 
+  // 监听选框状态
   addStatusListener() {
     this.status$.subscribe(status => {
       let style = {
         ...this.style,
       }
-      if (status === Status.Selected) {
-        style.border = '2px solid rgb(34, 183, 242)'
-      } else if (status === Status.Hover) {
-        style.border = '1px dashed rgb(34, 183, 242)'
+      switch (true) {
+        case status === Status.Selected:
+          style.border = '2px solid rgb(34, 183, 242)'
+          this.show = true;
+          break;
+        case status === Status.Hover:
+          this.show = true;
+          style.border = '1px dashed rgb(34, 183, 242)'
+          break;
+        case status === Status.None:
+          this.show = false;
+          break;
+        default:
+          break;
       }
+
       this.style = style;
     })
   }
