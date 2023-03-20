@@ -126,7 +126,6 @@ export class EditorComponent implements OnInit, AfterViewInit {
 
     const viewContainerRef = this.host.viewContainerRef;
     const componentRef = viewContainerRef.createComponent<ControlWrapComponent>(ControlWrapComponent);
-
     const rxElement = new RxELementModel({
       ...targetComponentMeta,
       componentRef,

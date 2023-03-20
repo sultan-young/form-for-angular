@@ -12,9 +12,14 @@ interface ELementsObj {
 @Injectable()
 export class EditingElementsService {
   private elementsProxy: ELementsObj = new Proxy<ELementsObj>({}, {
-    set(target, prop, newValue, receiver) {
-      target[prop as any] = newValue;
-      return true;
+    set(target, propKey, newValue, receiver) {
+      if (typeof propKey !== 'symbol') {
+        target[propKey] = newValue;
+        const rxElement = target[propKey];
+        rxElement.onInit()
+        return true;
+      }
+      return false;
     },
     deleteProperty(target, propKey) {
       if (target.hasOwnProperty(propKey) && typeof propKey !== 'symbol') {
@@ -67,7 +72,6 @@ export class EditingElementsService {
     const rxElement = this.elementsProxy[uid];
 
     if (rxElement) {
-      // this.elements[beDeletedElementIndex].destroy();
       delete this.elementsProxy[rxElement.uid];
     }
 
