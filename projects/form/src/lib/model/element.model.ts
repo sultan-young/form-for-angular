@@ -31,6 +31,8 @@ export class RxELementModel {
             throw Error('componentRef 不存在')
         }
         this.componentRef.destroy();
+        // TODO: 如果自身被选中，则将选中状态清除
+        
     }
 
     // 选中触发

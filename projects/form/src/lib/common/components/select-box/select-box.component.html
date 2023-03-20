@@ -4,7 +4,13 @@
 
     <div *ngSwitchCase="(status$ | async) === Status.Selected" class="actions">
       <div class="actions-item" (click)="deleteElement()">
-        <mat-icon class="actions-item" svgIcon="thumbs-up"></mat-icon>
+        <mat-icon class="actions-item" svgIcon="lib-move"></mat-icon>
+      </div>
+      <div class="actions-item" (click)="deleteElement()">
+        <mat-icon class="actions-item" svgIcon="lib-copy"></mat-icon>
+      </div>
+      <div class="actions-item" (click)="deleteElement()">
+        <mat-icon class="actions-item" svgIcon="lib-delete"></mat-icon>
       </div>
     </div>
   </ng-container>

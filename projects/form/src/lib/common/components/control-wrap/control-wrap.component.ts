@@ -9,7 +9,7 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { HostDirective } from '../../directive/host.directive';
-import { ComponentMeta, RXElement } from '../../../form.type';
+import { ComponentMeta } from '../../../form.type';
 
 @Component({
   selector: 'lib-control-wrap',
