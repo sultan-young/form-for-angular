@@ -6,8 +6,11 @@ import {
   filter,
   fromEvent,
   map,
+  merge,
+  of,
   reduce,
   scan,
+  share,
   shareReplay,
   tap,
 } from 'rxjs';
@@ -55,6 +58,8 @@ export class RxELementModel {
     this.listenSizeChange();
   }
 
+  // 元素删除
+  onDestroy$ = new Subject<null>();
   initHooks() {
     this.hooks = {
       // 元素位置变化
@@ -78,9 +83,10 @@ export class RxELementModel {
         map((_) => this)
       ),
       // 元素取消选中
-      onCancelSelect: elementHooks.selectElement.pipe(
-        filter(element => element.uid !== this.uid),
-        map((_) => this)
+      onCancelSelect: merge(elementHooks.selectElement, this.onDestroy$).pipe(
+        filter((element) => element?.uid !== this.uid),
+        map((_) => this),
+        share()
       ),
       // 元素删除
       onDelete: new Subject(),
@@ -108,6 +114,7 @@ export class RxELementModel {
     if (!this.componentRef) {
       throw Error('componentRef 不存在');
     }
+    this.onDestroy$.next(null);
     this.componentRef.destroy();
     // TODO: 如果自身被选中，则将选中状态清除
   }

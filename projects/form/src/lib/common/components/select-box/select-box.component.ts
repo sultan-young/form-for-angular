@@ -141,6 +141,7 @@ export class SelectBoxComponent implements OnInit {
     if(!selectedElement) return;
     // 取消监听元素位置变化
     selectedElement.hooks.onCancelSelect.subscribe(_ => {
+      console.log('删除元素111');
       this.show = false;
       this.destroySelf();
     })
