@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MouseService } from './mouse.service';
+import { elementHooks } from '../hooks';
 import { fromEvent, map, mergeMap, switchMap, takeUntil } from 'rxjs';
 import { HistoryService } from './history.service';
 import { RxELementModel } from '../../model/element.model';
@@ -31,10 +31,8 @@ export class EditingElementsService {
       return false;
     },
   });
-  public hooks = {};
 
   constructor(
-    private mouseService: MouseService,
     private historyService: HistoryService
   ) {}
 
@@ -45,26 +43,26 @@ export class EditingElementsService {
   addElement(element: RxELementModel): number {
     this.elementsProxy[element.uid] = element;
     const hostEl = element.hostEl;
-    const mouseEnter$ = fromEvent<MouseEvent>(hostEl, 'mouseenter');
-    const mouseLeave$ = fromEvent<MouseEvent>(hostEl, 'mouseleave');
-    const mouseClick$ = fromEvent<MouseEvent>(hostEl, 'click', {
-      capture: true,
-    });
+    // const mouseEnter$ = fromEvent<MouseEvent>(hostEl, 'mouseenter');
+    // const mouseLeave$ = fromEvent<MouseEvent>(hostEl, 'mouseleave');
+    // const mouseClick$ = fromEvent<MouseEvent>(hostEl, 'click', {
+    //   capture: true,
+    // });
 
-    mouseEnter$.pipe().subscribe((event) => {
-      this.mouseService.hooks.hoverSelectElement.next(element);
-    });
+    // mouseEnter$.pipe().subscribe((event) => {
+    //   elementHooks.hoverSelectElement.next(element);
+    // });
 
-    mouseLeave$.pipe().subscribe((_) => {
-      this.mouseService.hooks.leaveSelectElement.next(element);
-    });
-    // 当选中元素后，元素不再响应 enter 和 leave事件，直到重新接受到 释放点击状态的事件
-    mouseClick$.pipe().subscribe((event) => {
-      event.stopPropagation();
-      event.preventDefault();
-      this.mouseService.hooks.selectElement.next(element);
-    });
-    // mergeMap(_ => this.mouseService.hooks.selectElement)
+    // mouseLeave$.pipe().subscribe((_) => {
+    //   elementHooks.leaveSelectElement.next(element);
+    // });
+    // // 当选中元素后，元素不再响应 enter 和 leave事件，直到重新接受到 释放点击状态的事件
+    // mouseClick$.pipe().subscribe((event) => {
+    //   event.stopPropagation();
+    //   event.preventDefault();
+    //   elementHooks.selectElement.next(element);
+    // });
+    // mergeMap(_ => this.hooks.hooks.selectElement)
     return this.getSize();
   }
 

@@ -1,8 +1,8 @@
-<div class="select-wrap" #boxEl [style]="style" [hidden]="!show">
+<div class="select-wrap" #boxEl [style]="style" *ngIf="show">
   <ng-container [ngSwitch]="true">
-    <div *ngSwitchCase="(status$ | async) === Status.Hover" class="name">{{rxElement.name}}</div>
+    <div *ngSwitchCase="mode === Mode.Hover" class="name">{{hoverRxElement?.name}}</div>
 
-    <div *ngSwitchCase="(status$ | async) === Status.Selected" class="actions">
+    <div *ngSwitchCase="mode === Mode.Selected" class="actions">
       <div class="actions-item" (click)="deleteElement()">
         <mat-icon class="actions-item" svgIcon="lib-move"></mat-icon>
       </div>

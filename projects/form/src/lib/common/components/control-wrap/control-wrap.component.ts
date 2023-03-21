@@ -27,6 +27,7 @@ export class ControlWrapComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     const viewContainerRef = this.host.viewContainerRef;
+    console.log('this.componentMeta.component: ', this.componentMeta);
     const componentRef = viewContainerRef.createComponent(this.componentMeta.component);
   }
 }
